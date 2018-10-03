@@ -44,9 +44,9 @@ class SlickEnumSupportSpec extends FreeSpec with ScalaFutures with Matchers with
     }
     val lights = TableQuery[TrafficLightTable]
   }
-  class ConcreteRepository(val profile: slick.driver.H2Driver) extends TrafficLightRepository
+  class ConcreteRepository(val profile: slick.jdbc.H2Profile) extends TrafficLightRepository
 
-  val repo = new ConcreteRepository(slick.driver.H2Driver)
+  val repo = new ConcreteRepository(slick.jdbc.H2Profile)
   import repo.lights
   import repo.profile.api._
   val db = Database.forURL(
@@ -56,7 +56,7 @@ class SlickEnumSupportSpec extends FreeSpec with ScalaFutures with Matchers with
   )
 
   override def beforeAll(): Unit = {
-    db.run(lights.schema.create).futureValue(Timeout(Span(1, Second)))
+    db.run(lights.schema.create).futureValue(Timeout(Span(2, Seconds)))
   }
 
   override def afterAll(): Unit = {
